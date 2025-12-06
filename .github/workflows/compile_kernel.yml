@@ -1,0 +1,20 @@
+name: Compile Kernel for MT7981
+on:
+  workflow_dispatch: # 仅手动触发
+
+jobs:
+  compile-kernel:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Compile MT7981 Kernel (via ImmortalWrt)
+        uses: ophub/amlogic-s9xxx-armbian@main
+        with:
+          build_target: kernel        # 固定为编译内核
+          kernel_version: 6.6         # 关键：使用仓库支持的内核主版本
+          kernel_auto: false          # 不自动升级小版本
+          kernel_sign: -mt7981-custom # 内核文件自定义后缀
+          kernel_repo: padavanonly/immortalwrt-mt798x-6.6 # 关键：使用集成了MT7981驱动的源码
+          kernel_config: kernel/config_path # 你的配置文件目录
