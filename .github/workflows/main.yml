@@ -25,5 +25,5 @@ jobs:
           kernel_version: 6.12
           kernel_auto: false
           kernel_sign: -mt7981-custom
-          kernel_repo: padavanonly/immortalwrt-mt798x-6.6
+          kernel_repo: kernel.org
           kernel_config: kernel/config_path
