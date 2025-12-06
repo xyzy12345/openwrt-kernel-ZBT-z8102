@@ -1,28 +1,46 @@
-name: Compile Kernel for MT7981 (OpenWrt 6.12)
+name: Compile Kernel for MT7981 (OpenWrt 6.6)
 on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-     - name: Checkout repository
-       uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
   
-     - name: Check initial disk space
-         run: # ... (磁盘检查代码)
+      - name: Check initial disk space
+        run: |
+          df -h
+          echo "Available disk space before cleanup:"
+          df -h / | awk 'NR==2 {print "Free space: " $4}'
   
-     - name: Free up disk space  
-       run: # ... (清理代码)
+      - name: Free up disk space  
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          sudo apt-get clean
   
-     - name: Check disk space after cleanup
-        run: # ... (验证代码)
+      - name: Check disk space after cleanup
+        run: |
+          df -h
+          echo "Available disk space after cleanup:"
+          df -h / | awk 'NR==2 {print "Free space: " $4}'
   
       - name: Compile the Kernel
         uses: ophub/amlogic-s9xxx-armbian@main
         with:
           build_target: kernel
-          kernel_version: 6.12
+          kernel_version: 6.6
           kernel_auto: false
           kernel_sign: -mt7981-custom
           kernel_repo: padavanonly/immortalwrt-mt798x-6.6
