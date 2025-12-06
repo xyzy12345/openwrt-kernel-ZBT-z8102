@@ -1,5 +1,11 @@
 name: Compile Kernel for MT7981 (OpenWrt 6.12)
 on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
